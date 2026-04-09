@@ -1,4 +1,28 @@
 "use strict";
+/**
+ * @swagger
+ * /signals:
+ *   get:
+ *     summary: Get AI-powered buy/sell/neutral trading signal for a stock ticker
+ *     tags: [Signals]
+ *     parameters:
+ *       - in: query
+ *         name: ticker
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: TSLA
+ *         description: Stock ticker symbol (e.g. AAPL, TSLA, NVDA)
+ *     responses:
+ *       200:
+ *         description: Trading signal with confidence score and reason
+ *       400:
+ *         description: Missing or invalid ticker
+ *       401:
+ *         description: Invalid or missing API key
+ *       429:
+ *         description: Rate limit exceeded
+ */
 const express = require("express");
 const { fetchRedditPosts } = require("../services/redditService");
 const { fetchAllNews } = require("../services/newsService");

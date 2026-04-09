@@ -1,4 +1,28 @@
 "use strict";
+/**
+ * @swagger
+ * /sentiment:
+ *   get:
+ *     summary: Get AI-powered sentiment analysis for a stock ticker
+ *     tags: [Sentiment]
+ *     parameters:
+ *       - in: query
+ *         name: ticker
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: AAPL
+ *         description: Stock ticker symbol (e.g. AAPL, TSLA, NVDA)
+ *     responses:
+ *       200:
+ *         description: Sentiment analysis with score, trend, signal and top themes
+ *       400:
+ *         description: Missing or invalid ticker
+ *       401:
+ *         description: Invalid or missing API key
+ *       429:
+ *         description: Rate limit exceeded
+ */
 const express = require("express");
 const { fetchRedditPosts } = require("../services/redditService");
 const { fetchAllNews } = require("../services/newsService");

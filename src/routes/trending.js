@@ -1,4 +1,18 @@
 "use strict";
+/**
+ * @swagger
+ * /trending:
+ *   get:
+ *     summary: Get the top 10 trending stock tickers by social media mentions
+ *     tags: [Trending]
+ *     responses:
+ *       200:
+ *         description: Ranked list of trending tickers with mention counts
+ *       401:
+ *         description: Invalid or missing API key
+ *       429:
+ *         description: Rate limit exceeded
+ */
 const express = require("express");
 const { fetchRedditPosts } = require("../services/redditService");
 const { getCache, setCache } = require("../utils/cache");
