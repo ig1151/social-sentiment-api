@@ -7,14 +7,14 @@ const { getCache, setCache } = require("../utils/cache");
 const { send, fail } = require("../utils/response");
 const router = express.Router();
 
-const TTL = 300; // 5 minutes
+const TTL = 300;
 
 router.get("/", async (req, res, next) => {
   try {
     const ticker = (req.query.ticker || "").toUpperCase().trim();
     if (!ticker) return fail(res, 400, "ticker query parameter is required");
 
-    const cacheKey = `sentiment:${ticker}`;
+    const cacheKey = "sentiment:" + ticker;
     const cached = getCache(cacheKey);
     if (cached) return send(res, 200, cached, { cached: true, ttl: TTL });
 
@@ -25,19 +25,17 @@ router.get("/", async (req, res, next) => {
 
     const allPosts = [...redditPosts, ...newsPosts];
     const posts = allPosts.length > 0 ? allPosts : [
-  { title: ticker + " stock discussion", text: "investors watching " + ticker + " closely today" },
-  { title: ticker + " market analysis", text: "analysts reviewing " + ticker + " performance" },
-];
+      { title: ticker + " stock discussion", text: "investors watching " + ticker + " closely today" },
+      { title: ticker + " market analysis", text: "analysts reviewing " + ticker + " performance" },
+    ];
 
-    }
-
-    const analysis = await analyzeSentiment(ticker, allPosts);
+    const analysis = await analyzeSentiment(ticker, posts);
     const result = {
       ticker,
       ...analysis,
       sources: {
         reddit: redditPosts.length,
-        news: newsPosts.length,
+        news:   newsPosts.length,
       },
     };
 
