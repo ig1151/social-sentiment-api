@@ -10,7 +10,7 @@ async function analyzeSentiment(ticker, posts) {
 
   const prompt = [
     `You are a financial sentiment analysis engine.`,
-    `Analyze the following social media posts and news headlines about the stock ticker "${ticker}".`,
+    `Analyze the following social media posts and news headlines about "${ticker}".`,
     `Return ONLY a valid JSON object with no explanation, no markdown, no backticks:`,
     `{`,
     `  "sentiment_score": <float between -1.0 (very bearish) and 1.0 (very bullish)>,`,
@@ -27,23 +27,22 @@ async function analyzeSentiment(ticker, posts) {
 
   try {
     const res = await axios.post(
-      "https://api.anthropic.com/v1/messages",
+      "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "claude-sonnet-4-20250514",
+        model: "anthropic/claude-sonnet-4-5",
         max_tokens: 500,
         messages: [{ role: "user", content: prompt }],
       },
       {
         headers: {
-  "Content-Type": "application/json",
-  "x-api-key": process.env.ANTHROPIC_API_KEY,
-  "anthropic-version": "2023-06-01",
-},
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        },
         timeout: 15000,
       }
     );
 
-    const text = res.data?.content?.[0]?.text || "{}";
+    const text = res.data?.choices?.[0]?.message?.content || "{}";
     const clean = text.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(clean);
     return { ...parsed, mentions: posts.length };

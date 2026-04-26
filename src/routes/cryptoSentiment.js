@@ -15,17 +15,15 @@ async function fetchCryptoPosts(symbol) {
     const res = await axios.post(
       "https://api.tavily.com/search",
       {
-        query: `${symbol} cryptocurrency price sentiment reddit community 2026`,
+        api_key: process.env.TAVILY_API_KEY,
+        query: `${symbol} cryptocurrency price sentiment community 2026`,
         max_results: 10,
         search_depth: "basic",
         include_answer: false,
         topic: "finance",
       },
       {
-        headers: {
-          Authorization: `Bearer ${process.env.TAVILY_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         timeout: 12000,
       }
     );
@@ -46,17 +44,15 @@ async function fetchTrendingPosts() {
     const res = await axios.post(
       "https://api.tavily.com/search",
       {
-        query: "crypto trending coins reddit community mentions today 2026",
+        api_key: process.env.TAVILY_API_KEY,
+        query: "crypto trending coins community mentions today 2026",
         max_results: 10,
         search_depth: "basic",
         include_answer: false,
         topic: "finance",
       },
       {
-        headers: {
-          Authorization: `Bearer ${process.env.TAVILY_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         timeout: 12000,
       }
     );

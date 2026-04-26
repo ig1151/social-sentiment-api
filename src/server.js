@@ -27,6 +27,9 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get("/openapi.json", (req, res) => res.json(swaggerSpec));
 app.use("/register", registerRoute);
 
+const cryptoSentimentRoute = require("./routes/cryptoSentiment");
+app.use("/crypto-sentiment", cryptoSentimentRoute);
+
 // Protected routes
 app.use(apiKeyMiddleware);
 app.use(rateLimiter);
